@@ -12,9 +12,9 @@ Run the streamlit app:
 streamlit run main.py
 ```
 
-## Hosted On
+<!-- ## Hosted On
 
-The web-app uses streamlit and is hosted on [Azure Container Apps.](https://azure.microsoft.com/en-ca/products/container-apps)
+The web-app uses streamlit and is hosted on [Azure Container Apps.](https://azure.microsoft.com/en-ca/products/container-apps) -->
 
 ## Author
 
