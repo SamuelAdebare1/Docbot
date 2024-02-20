@@ -18,4 +18,4 @@ The web-app uses streamlit and is hosted on [Azure Container Apps.](https://azur
 
 ## Author
 
-- LinkedIn: [rishabkumar7](https://www.linkedin.com/in/samuel-oyewoade/)
+- LinkedIn: [Samueladebare1](https://www.linkedin.com/in/samuel-oyewoade/)
