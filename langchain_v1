@@ -1,0 +1,50 @@
+import streamlit as st
+from langchain.chains import RetrievalQA
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain.text_splitter import CharacterTextSplitter
+# from langchain_community.document_loaders import YoutubeLoader
+# from langchain.text_splitter import RecursiveCharacterTextSplitter
+# from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain_community.vectorstores import FAISS
+# from langchain_community.llms import OpenAI
+# from langchain import PromptTemplate
+# from langchain.chains import LLMChain
+from dotenv import load_dotenv
+from langchain.indexes import VectorstoreIndexCreator
+
+# Document Loader
+from langchain_community.document_loaders import TextLoader
+from langchain_community.llms import HuggingFaceHub
+
+loader = TextLoader('./data.txt')
+documents = loader.load()
+text_splitter = CharacterTextSplitter(chunk_size=500, chunk_overlap=100)
+docs = text_splitter.split_documents(documents)
+print("""
+
+====================================================
+
+""")
+
+embeddings = HuggingFaceEmbeddings()
+db = FAISS.from_documents(docs, embeddings)
+retriever = db.as_retriever()
+query = "What is the remarkable feature of dog?"
+docs = db.similarity_search(query)
+docs_page_content = " ".join([d.page_content.replace("\n", "") for d in docs])
+# print((docs))
+llm = HuggingFaceHub(huggingfacehub_api_token="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",
+                     #  repo_id="google/flan-t5-xl",
+                     repo_id="google-t5/t5-large",
+                     model_kwargs={"temperature": 0.5, "max_length": 1024})
+# index = VectorstoreIndexCreator(
+#     embedding=HuggingFaceEmbeddings(),
+#     text_splitter=CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)).from_documents(loader)
+chain = RetrievalQA.from_chain_type(llm=llm,
+                                    chain_type="stuff",
+                                    # retriever=index.vectorstore.as_retriever(),
+                                    retriever=retriever,
+                                    input_key="question")
+query_text = 'Are dogs useful?'
+print(chain.invoke(query_text))
+# chain.run()
