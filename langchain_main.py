@@ -19,7 +19,8 @@ def generate_response(uploaded_file, api_key, query):
         # Select embeddings
         embeddings = HuggingFaceEmbeddings()
         # Create a vectorstore from documents
-        db = FAISS.from_documents(docs, embeddings)
+        # db = FAISS.from_documents(docs, embeddings)
+        db = FAISS.from_text(docs, embeddings)
         # Create retriever interface
         retriever = db.as_retriever()
         docs = db.similarity_search(query)
