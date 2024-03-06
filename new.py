@@ -208,14 +208,50 @@ if submitted and openai_api_key.startswith('sk-'):
 #     st.warning(
 #         "Please confirm that all inputs are correctly provided before submitting.")
 
+
+# ==================================== # ====================================
+
+with st.form('myform', clear_on_submit=True):
+    api_key = st.text_input(
+        'OpenAI API Key',
+        type='password',
+        # disabled=not (uploaded_file and query_text)
+    )
+    submitted = st.form_submit_button(
+        'Submit',
+        # disabled=not (uploaded_file and query_text)
+    )
+    if submitted and api_key.startswith('sk-'):
+        with st.spinner('Calculating...'):
+            if (st.session_state["file_content_"] != "" or st.session_state["text_box"] != "") and len(query_text) > 0:
+                with st.spinner('Calculating...'):
+                    st.session_state["query_"] = query_text
+                    if st.session_state["input_method_"] == "File":
+                        if st.session_state["file_content_"] == "":
+                            st.warning("Please upload a file")
+                        else:
+                            # st.write(st.session_state)
+                            # st.session_state["file_content_"] = generate_text(
+                            #     uploaded_file)
+                            response = generate_response(
+                                st.session_state["file_content_"], openai_api_key, st.session_state["query_"])
+                            result.append(response)
+                    elif st.session_state["input_method_"] == "Text box":
+                        st.session_state["text_box"] = passage
+
+                        if st.session_state["text_box"] == "":
+                            st.warning("Please input some text")
+                        else:
+                            response = generate_response(
+                                st.session_state["text_box"], openai_api_key, st.session_state["query_"])
+                            result.append(response)
+            else:
+                st.warning(
+                    "Please confirm that all inputs are correctly provided before submitting.")
+            del api_key
+
+# ==================================== # ====================================
+
+
 if len(result):
     st.info(response)
-
-
-def more_page():
-    prev = st.button("Prev")
-    if prev:
-        switch_page("Advice")
-
-
-more_page()
