@@ -1,6 +1,6 @@
 from langchain.chains import ConversationalRetrievalChain, RetrievalQA
 from langchain_community.vectorstores import Chroma
-from langchain_openai import OpenAIEmbeddings
+from langchain_community.embeddings import OpenAIEmbeddings
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.llms import OpenAI
 # from langchain_community.chat_models import ChatOpenAI
